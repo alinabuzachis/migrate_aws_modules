@@ -8,10 +8,7 @@ export GITHUB_TOKEN="Token ..."
 export USERNAME="github username"
 module_to_migrate=ec2_vpc_igw
 ```
-Plase pecify the path to this folder.
-```bash
-main_folder_scripts=/path_to_the_folder
-```
+
 Finally, run the script.
 ```bash
 $ ./run.sh
