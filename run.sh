@@ -52,7 +52,7 @@ sed -i '' '/'$module_to_migrate'/d' tests/sanity/*.txt
 git add tests/sanity/*.txt
 git commit -m "Update ignore files" 
 
-python3 $main_folder_scipts/regenerare_runtime.py ${c_a_path} ${a_a_path} $module_to_migrate
+python3 $main_folder_scripts/regenerare_runtime.py ${c_a_path} ${a_a_path} $module_to_migrate
 
 cd ${a_a_path}
 git add meta/runtime*
@@ -75,4 +75,4 @@ git commit -m "Add changelog fragment"
 git push origin promote_$module_to_migrate --force
 
 sleep 10
-python $main_folder_scipts/open_pr.py $module_to_migrate promote_$module_to_migrate
+python $main_folder_scripts/open_pr.py $module_to_migrate promote_$module_to_migrate
