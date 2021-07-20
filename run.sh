@@ -7,7 +7,7 @@ module_to_migrate=ec2_vpc_igw
 c_a_path=/Users/alinabuzachis/dev/repo_migration/community.aws
 a_a_path=/Users/alinabuzachis/dev/repo_migration/amazon.aws
 
-main_folder_scripts=/Users/alinabuzachis/dev/migrate_aws_modules
+main_folder_scripts=$(pwd)
 
 export GITHUB_TOKEN="Token "
 export USERNAME="username"
