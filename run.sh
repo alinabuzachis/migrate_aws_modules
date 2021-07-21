@@ -2,15 +2,15 @@
 set -euo pipefail
 
 
-module_to_migrate=ec2_vpc_igw
+module_to_migrate=ec2_vpc_nat_gateway
 
 c_a_path=/Users/alinabuzachis/dev/repo_migration/community.aws
 a_a_path=/Users/alinabuzachis/dev/repo_migration/amazon.aws
 
 main_folder_scripts=$(pwd)
 
-export GITHUB_TOKEN="Token "
-export USERNAME="username"
+export GITHUB_TOKEN="GitHub Token"
+export USERNAME="Github username"
 
 cd ${c_a_path}
 git checkout -B promote_$module_to_migrate origin/main
@@ -52,16 +52,20 @@ sed -i '' '/'$module_to_migrate'/d' tests/sanity/*.txt
 git add tests/sanity/*.txt
 git commit -m "Update ignore files" 
 
-python3 $main_folder_scripts/regenerare_runtime.py ${c_a_path} ${a_a_path} $module_to_migrate
+python3 $main_folder_scripts/regenerare.py ${c_a_path} ${a_a_path} $module_to_migrate
 
 cd ${a_a_path}
 git add meta/runtime*
 git commit -m "Update runtime" meta/runtime*
 
-sed -i '' 's/community.aws.'$module_to_migrate'/amazon.aws.'$module_to_migrate'/g' plugins/modules/$module_to_migrate*
-sed -i '' 's/collection_name=community.aws/collection_name=amazon.aws/g' plugins/modules/$module_to_migrate*
+sed -i '' "s/community.aws.$module_to_migrate/amazon.aws.$module_to_migrate/g" plugins/modules/$module_to_migrate*
+sed -i '' "s/collection_name='community.aws'/collection_name='amazon.aws'/g" plugins/modules/$module_to_migrate*
 git add plugins/modules/$module_to_migrate*
 git commit -m "Update FQDN"
+
+python $main_folder_scripts/clean_tests.py ${a_a_path} $module_to_migrate
+git add tests/integration/targets/$module_to_migrate/*
+git commit -m "Remove collection reference inside the tests"
 
 git add changelogs/fragments/migrate_$module_to_migrate.yml
 git commit -m "Add changelog fragment"
