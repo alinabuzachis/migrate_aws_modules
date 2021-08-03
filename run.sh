@@ -69,6 +69,11 @@ git commit -m "Remove collection reference inside the tests"
 
 git add changelogs/fragments/migrate_$module_to_migrate.yml
 git commit -m "Add changelog fragment"
+
+echo "${module_to_migrate}_info.yml" > "${module_to_migrate}_facts.yml"
+git add plugins/modules/$module_to_migrate*
+git commit -m "Add symlink for fact module"
+
 git push origin promote_$module_to_migrate --force
 
 cd ${c_a_path}
