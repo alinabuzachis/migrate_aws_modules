@@ -35,10 +35,6 @@ cd ${a_a_path}
 git checkout -B promote_$module_to_migrate origin/main
 git am ${c_a_path}/*.patch
 
-./tests/sanity/refresh_ignore_files
-git add tests/sanity/*.txt
-git commit -m "Update ignore files"
-
 cd ${c_a_path}
 git checkout origin/main
 git branch -D promote_$module_to_migrate
@@ -48,9 +44,9 @@ git ls-files -i -x "*${module_to_migrate}*" | git update-index --force-remove --
 git add -u
 git commit -m "Remove modules"
 
-sed -i '' '/'$module_to_migrate'/d' tests/sanity/*.txt
+${main_folder_scripts}/refresh_ignore_files $module_to_migrate ${c_a_path} ${a_a_path}
 git add tests/sanity/*.txt
-git commit -m "Update ignore files" 
+git commit -m "Update ignore files"
 
 python3 $main_folder_scripts/regenerare.py ${c_a_path} ${a_a_path} $module_to_migrate
 
@@ -73,6 +69,9 @@ git commit -m "Add changelog fragment"
 echo "${module_to_migrate}_info.py" > "plugins/modules/${module_to_migrate}_facts.py"
 git add plugins/modules/$module_to_migrate*
 git commit -m "Add symlink for facts module"
+
+git add tests/sanity/*.txt
+git commit -m "Update ignore files"
 
 git push origin promote_$module_to_migrate --force
 
