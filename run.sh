@@ -66,7 +66,8 @@ git commit -m "Remove collection reference inside the tests"
 git add changelogs/fragments/migrate_$module_to_migrate.yml
 git commit -m "Add changelog fragment"
 
-echo "${module_to_migrate}_info.py" > "plugins/modules/${module_to_migrate}_facts.py"
+rm plugins/modules/${module_to_migrate}_facts.py
+ln -s ${module_to_migrate}_info.py plugins/modules/${module_to_migrate}_facts.py
 git add plugins/modules/$module_to_migrate*
 git commit -m "Add symlink for facts module"
 
