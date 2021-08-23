@@ -14,15 +14,16 @@ to_be_removed = []
 for version in ["2.9", "2.10", "2.11", "2.12"]:
     ignore_file = ignore_dir / f"ignore-{version}.txt"
     ignore_content = ignore_file.read_text().split("\n")
-    ignore_content = list(filter(None, ignore_content))
+    _ignore_content = ignore_content.copy()
+    _ignore_content = list(filter(None, ignore_content))
 
     for line in ignore_content:
         if module_to_migrate in line:
             to_be_removed.append(line)
-            ignore_content.remove(line)
+            _ignore_content.remove(line)
     
     if to_be_removed:
-        ignore_file.write_text("\n".join(ignore_content).lstrip("\n"))
+        ignore_file.write_text("\n".join(_ignore_content).lstrip("\n"))
         ignore_dir = amazon_path / "tests" / "sanity"
         ignore_dir.mkdir(parents=True, exist_ok=True)
         ignore_file = ignore_dir / f"ignore-{version}.txt"
